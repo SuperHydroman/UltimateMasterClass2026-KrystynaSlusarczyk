@@ -6,9 +6,8 @@ List<string> todos = new();
 do
 {
     ShowMenu();
+    ExecuteMenuChoice();
 } while (!shallExit);
-
-return;
 
 // Local helper methods below
 void ShowMenu()
@@ -20,25 +19,24 @@ void ShowMenu()
     Console.WriteLine("[R]emove a TODO");
     Console.WriteLine("[E]xit");
     Console.Write("> ");
-    
+}
+
+void ExecuteMenuChoice()
+{
     string? userChoice = Console.ReadLine();
 
-    switch(userChoice)
+    switch(userChoice?.Trim()?.ToUpperInvariant())
     {
         case "S":
-        case "s":
             ListTodos();
             break;
         case "A":
-        case "a":
             AddTodo();
             break;
-        case "R": 
-        case "r":
+        case "R":
             RemoveTodo();
             break;
-        case "E": 
-        case "e":
+        case "E":
             shallExit = true;
             break;
         default:
@@ -51,7 +49,7 @@ void ShowMenu()
 void ListTodos()
 {
     Console.WriteLine();
-    if (todos.Count <= 0) 
+    if (todos.Count == 0) 
         Console.WriteLine("No TODOs have been added yet.");
     else
     {
@@ -63,44 +61,44 @@ void ListTodos()
 
 void AddTodo()
 {
-    Console.WriteLine();
-    string? description;
-    
-    do
+    while (true)
     {
-        Console.WriteLine("Enter the TODO description: ");
+        Console.WriteLine();
+        Console.WriteLine("Enter the TODO description:");
         Console.Write("> ");
         
-        description = Console.ReadLine();
+        string? description = Console.ReadLine()?.Trim();
+
 
         if (string.IsNullOrEmpty(description))
+        {
             Console.WriteLine("The description cannot be empty.");
-    } while (string.IsNullOrEmpty(description));
-
-
-    if (todos.Contains(description))
-    {
-        Console.WriteLine("The description must be unique.");
+            continue;
+        }
+        
+        if (todos.Contains(description))
+        {
+            Console.WriteLine("The description must be unique.");
+            continue;
+        }
+        
+        todos.Add(description);
+        Console.WriteLine();
+        Console.WriteLine($"TODO successfully added: {description}");
         return;
     }
-
-    todos.Add(description);
-    Console.WriteLine();
-    Console.WriteLine($"TODO successfully added: {description}");
 }
 
 void RemoveTodo()
 {
-    if (todos.Count <= 0)
+    if (todos.Count == 0)
     {
         Console.WriteLine();
         Console.WriteLine("No TODOs have been added yet.");
         return;
     }
-    
-    string? userChoice;
-    
-    do
+
+    while (true)
     {
         Console.WriteLine();
         Console.WriteLine("Select the index of the TODO you want to remove:");
@@ -109,29 +107,26 @@ void RemoveTodo()
             Console.WriteLine($"{i + 1}. {todos[i]}");
         
         Console.Write("> ");
-        userChoice = Console.ReadLine();
+        string? input = Console.ReadLine();
 
-        Console.WriteLine();
+        if (!int.TryParse(input, out int number))
+        {
+            Console.WriteLine("Please enter a valid number.");
+            continue;
+        }
+
+        int index = number - 1; // Normalize input to list indexes
+
+        if (index < 0 || index >= todos.Count)
+        {
+            Console.WriteLine("The given index is not valid.");
+            continue;
+        }
+
+        string description = todos[index];
+        todos.RemoveAt(index);
         
-        if (string.IsNullOrEmpty(userChoice))
-            Console.WriteLine("Selected index cannot be empty.");
-        else if (int.TryParse(userChoice, out int index))
-        {
-            index -= 1; // Normalize input to list indexes
-            if (index < 0 || index >= todos.Count)
-            {
-                Console.WriteLine("The given index is not valid.");
-                userChoice = "";
-                continue;
-            }
-
-            string description = todos[index];
-            todos.RemoveAt(index);
-            Console.WriteLine($"TODO removed: {description}");
-        }
-        else
-        {
-            Console.WriteLine("Please enter a valid index number.");
-        }
-    } while (string.IsNullOrEmpty(userChoice));
+        Console.WriteLine($"TODO removed: {description}");
+        return;
+    }
 }
