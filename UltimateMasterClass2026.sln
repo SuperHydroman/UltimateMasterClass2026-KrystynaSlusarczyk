@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoList", "Assignments\TodoList\TodoList.csproj", "{6658E2EE-BB01-47A2-AC00-9ED2C3C15633}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator", "Assignments\Calculator\Calculator.csproj", "{DFFBB42D-8134-4AAE-8B15-5F26C755398E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6658E2EE-BB01-47A2-AC00-9ED2C3C15633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6658E2EE-BB01-47A2-AC00-9ED2C3C15633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6658E2EE-BB01-47A2-AC00-9ED2C3C15633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6658E2EE-BB01-47A2-AC00-9ED2C3C15633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFFBB42D-8134-4AAE-8B15-5F26C755398E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFFBB42D-8134-4AAE-8B15-5F26C755398E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFFBB42D-8134-4AAE-8B15-5F26C755398E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFFBB42D-8134-4AAE-8B15-5F26C755398E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

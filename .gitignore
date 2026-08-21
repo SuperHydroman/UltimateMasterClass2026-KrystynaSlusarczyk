@@ -1,0 +1,44 @@
+# .NET build output
+[Bb]in/
+[Oo]bj/
+[Aa]rtifacts/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider / IntelliJ-based IDEs
+.idea/
+*.sln.iml
+
+# Test and coverage output
+TestResults/
+coverage/
+coverage-*/
+*.coverage
+*.coveragexml
+
+# NuGet packages and generated package files
+*.nupkg
+*.snupkg
+packages/
+!packages/build/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
