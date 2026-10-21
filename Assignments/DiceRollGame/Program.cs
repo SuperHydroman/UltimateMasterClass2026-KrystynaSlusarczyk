@@ -1,21 +1,12 @@
 ﻿using DiceRollGame;
+using DiceRollGame.Game;
+using DiceRollGame.Game.Enums;
 
-int randomNumber = Dice.Roll();
-const int chances = 3;
-int guessCount = 0;
-bool isGuessed;
+var random = new Random();
+var dice = new Dice(random);
+var guessingGame = new GuessingGame(dice);
 
-Console.WriteLine("Dice rolled. Guess what number it shows in 3 tries.");
-Console.WriteLine();
+GameResult gameResult = guessingGame.Play();
+GuessingGame.PrintResult(gameResult);
 
-do
-{
-    string? input = Console.ReadLine() ?? "";
-    isGuessed = InputValidator.Validate(input, randomNumber);
-    
-    guessCount++;
-} while (guessCount < chances && !isGuessed);
-
-if (isGuessed)
-    Console.WriteLine("You win");
-else Console.WriteLine("You lose");
+Console.ReadKey();
