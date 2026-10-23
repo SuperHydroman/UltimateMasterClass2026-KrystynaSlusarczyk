@@ -1,65 +1,35 @@
-﻿// var pizza = new Pizza();
-// pizza.AddIngredient(new Mozerella());
-// pizza.AddIngredient(new Cheddar());
-// pizza.AddIngredient(new TomatoSauce());
-//
-// Console.WriteLine(pizza.Describe());
+﻿var numbers = new List<int> { 1, 4, 6, -1, 12, 44, -8, -19 };
+bool shallAddPositiveOnly = false;
 
-// Console.WriteLine("Variable of type Cheddar");
-//
-// Cheddar cheddar = new Cheddar();
-// Console.WriteLine(cheddar.Name);
-//
-// Console.WriteLine("Variable of type Ingredient");
-// Ingredient ingredient = new Cheddar();
-// Console.WriteLine(ingredient.Name);
-    
-var ingredients = new List<Ingredient>
-{
-    new Cheddar(),
-    new Mozerella(),
-    new TomatoSauce()
-};
+NumbersSumCalculator calculator = shallAddPositiveOnly
+    ? new PositiveNumbersSumCalculator()
+    : new NumbersSumCalculator();
 
-foreach (var ingredient in ingredients)
-{
-    Console.WriteLine(ingredient.Name);
-}
-
+int sum = calculator.Calculate(numbers);
+Console.WriteLine($"Sum is: {sum}");
 Console.ReadKey();
 
-public class Pizza
+public class NumbersSumCalculator
 {
-    private List<Ingredient> _ingredients = new List<Ingredient>();
-    
-    public void AddIngredient(Ingredient ingredient)
+    public int Calculate(List<int> numbers)
     {
-        _ingredients.Add(ingredient);
+        int sum = 0;
+
+        foreach (var number in numbers)
+        {
+            if (ShallBeAdded(number))
+            {
+                sum += number;
+            }
+        }
+
+        return sum;
     }
 
-    public string Describe() =>
-        $"This is a pizza with {string.Join(", ", _ingredients)}.";
+    protected virtual bool ShallBeAdded(int number) => true;
 }
 
-public class Ingredient
+public class PositiveNumbersSumCalculator : NumbersSumCalculator
 {
-    public virtual string Name { get; } = "Some ingredient";
-}
-
-public class Cheddar : Ingredient
-{
-    public override string Name => "Cheddar cheese";
-    public int AgedForMonths { get; }
-}
-
-public class TomatoSauce : Ingredient
-{
-    public string Name => "Tomato Sauce";
-    public int TomatosIn100Grams { get; }
-}
-
-public class Mozerella : Ingredient
-{
-    public override string Name => "Mozerella";
-    public bool IsLight { get; }
+    protected override bool ShallBeAdded(int number) => number > 0;
 }
