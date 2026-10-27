@@ -1,4 +1,5 @@
 ﻿using Decompositioning;
+using Decompositioning.Exercise_8;
 
 var exercises = new List<Exercise>
 {
