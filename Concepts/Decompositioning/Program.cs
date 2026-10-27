@@ -10,6 +10,7 @@ var exercises = new List<Exercise>
     new Exercise_5(),
     new Exercise_6(),
     new Exercise_7(),
+    new Exercise_8(),
 };
 
 foreach (Exercise exercise in exercises)
