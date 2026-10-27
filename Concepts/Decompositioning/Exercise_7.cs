@@ -4,22 +4,26 @@ public class Exercise_7 : Exercise
 {
     protected override void Demonstrate()
     {
-        var application = new PayrollProcessor();
-        
-        application.ProcessFreelancer("Gideon", 16.51m, 28);
-        Console.WriteLine("-------------------");
-        application.ProcessFullTimeEmployee("Gideon", 2850, 85, false);
-        Console.WriteLine("-------------------");
-        application.ProcessFullTimeEmployee("Gideon", 2850, 85, true);
+        PayrollProcessor.ProcessFreelancer("Gideon", 16.51m, 28);
+        PayrollProcessor.ProcessFullTimeEmployee("Gideon", 2850, 85, false);
+        PayrollProcessor.ProcessFullTimeEmployee("Gideon", 2850, 85, true);
     }
 }
 
 public class PayrollProcessor
 {
-    public void ProcessFullTimeEmployee(string name, decimal monthlySalary, int performanceScore, bool hasHealthInsurance)
+    private const int RegularMonthlyHours = 160;
+    private const decimal OvertimeMultiplier = 1.5m;
+    private const decimal MonthlyInsuranceCost = 125m;
+    
+    public static void ProcessFullTimeEmployee(string name, decimal monthlySalary, int performanceScore, bool hasHealthInsurance)
     {
-        if (!IsValidEmployeeName(name) || !IsValidSalary(monthlySalary) || !IsValidPerformanceScore(performanceScore))
+        if (HasValidationError(string.IsNullOrWhiteSpace(name), "Invalid employee name.") ||
+            HasValidationError(monthlySalary <= 0, "Invalid salary.") ||
+            HasValidationError(performanceScore is < 0 or > 100, "Invalid performance score."))
+        { 
             return;
+        }
 
         decimal bonus = CalculateBonus(monthlySalary,  performanceScore);
         decimal grossPay = monthlySalary + bonus;
@@ -28,112 +32,35 @@ public class PayrollProcessor
         decimal insuranceCost = 0;
         
         if (hasHealthInsurance)
-            insuranceCost = 125m;
+            insuranceCost = MonthlyInsuranceCost;
 
-        PrintPayroll(name, grossPay, tax, insuranceCost, "Full-time");
+        PrintPayroll(name, grossPay, tax, "Full-time", insuranceCost);
     }
 
-    public void ProcessFreelancer(string name, decimal hourlyRate, int hoursWorked)
+    public static void ProcessFreelancer(string name, decimal hourlyRate, int hoursWorked)
     {
-        if (!IsValidEmployeeName(name) || !IsValidHourlyRate(hourlyRate) || !IsValidHoursWorked(hoursWorked))
+        if (HasValidationError(string.IsNullOrWhiteSpace(name), "Invalid employee name.") ||
+            HasValidationError(hourlyRate <= 0, "Invalid hourly rate.") ||
+            HasValidationError(hoursWorked < 0, "Invalid hours worked."))
+        {
             return;
-
-        
-        decimal grossPay;
-
-        if (hoursWorked > 160)
-        {
-            int overtimeHours = hoursWorked - 160;
-            grossPay = (160 * hourlyRate)
-                       + (overtimeHours * hourlyRate * 1.5m);
-        }
-        else
-        {
-            grossPay = hoursWorked * hourlyRate;
-        }
-
-        decimal tax;
-
-        if (grossPay > 5000)
-        {
-            tax = grossPay * 0.30m;
-        }
-        else if (grossPay > 3000)
-        {
-            tax = grossPay * 0.20m;
-        }
-        else
-        {
-            tax = grossPay * 0.10m;
-        }
-
-        decimal netPay = grossPay - tax;
-
-        Console.WriteLine($"Employee: {name}");
-        Console.WriteLine("Type: Freelancer");
-        Console.WriteLine($"Gross pay: {grossPay:C}");
-        Console.WriteLine($"Tax: {tax:C}");
-        Console.WriteLine($"Insurance: {0m:C}");
-        Console.WriteLine($"Net pay: {netPay:C}");
-        Console.WriteLine("--------------------");
-    }
-
-    private bool IsValidEmployeeName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            Console.WriteLine("Invalid employee name.");
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool IsValidSalary(decimal salary)
-    {
-        if (salary <= 0)
-        {
-            Console.WriteLine("Invalid salary.");
-            return false;
         }
         
-        return true;
+        decimal grossPay = CalculateFreelanceGrossPay(hoursWorked, hourlyRate);
+        decimal tax = CalculateTax(grossPay);
+
+        PrintPayroll(name, grossPay, tax, "Freelancer");
     }
 
-    private bool IsValidPerformanceScore(int performanceScore)
+    private static bool HasValidationError(bool condition, string errorMessage)
     {
-        if (performanceScore < 0 || performanceScore > 100)
-        {
-            Console.WriteLine("Invalid performance score.");
-            return false;
-        }
+        if (condition)
+            Console.WriteLine(errorMessage);
 
-        return true;
+        return condition;
     }
 
-    private bool IsValidHourlyRate(decimal hourlyRate)
-    {
-        if (hourlyRate <= 0)
-        {
-            Console.WriteLine("Invalid hourly rate.");
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool IsValidHoursWorked(int hoursWorked)
-    {
-        if (hoursWorked < 0)
-        {
-            Console.WriteLine("Invalid hours worked.");
-            return false;
-        }
-
-        return true;
-    }
-
-    private decimal CalculateBonus(decimal monthlySalary, int performanceScore)
+    private static decimal CalculateBonus(decimal monthlySalary, int performanceScore)
     {
         return performanceScore switch
         {
@@ -144,7 +71,7 @@ public class PayrollProcessor
         };
     }
 
-    private decimal CalculateTax(decimal grossPay)
+    private static decimal CalculateTax(decimal grossPay)
     {
         return grossPay switch
         {
@@ -154,7 +81,18 @@ public class PayrollProcessor
         };
     }
 
-    private void PrintPayroll(string name, decimal grossPay, decimal tax, decimal insuranceCost,string type)
+    private static decimal CalculateFreelanceGrossPay(int hoursWorked, decimal hourlyRate)
+    {
+        if (hoursWorked > RegularMonthlyHours)
+        {
+            int overtimeHours = hoursWorked - RegularMonthlyHours;
+            return (RegularMonthlyHours * hourlyRate) + (overtimeHours * hourlyRate * OvertimeMultiplier);
+        }
+        
+        return hoursWorked * hourlyRate;
+    }
+
+    private static void PrintPayroll(string name, decimal grossPay, decimal tax, string type, decimal insuranceCost = 0)
     {
         decimal netPay = grossPay - tax - insuranceCost;
         
