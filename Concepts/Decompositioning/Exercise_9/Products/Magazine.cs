@@ -2,13 +2,13 @@
 
 public class Magazine : Product
 {
-    private string Author { get; }
-    private string Isbn { get; }
-    protected override int MaxBorrowTimeInDays { get; } = 14;
+    private string IssueNumber { get; }
+    private DateTime PublishDate { get; }
+    public override int MaxBorrowTimeInDays { get; } = 14;
 
-    public Magazine(string title, string author, string isbn) : base(title)
+    public Magazine(string title, string issueNumber, DateTime publishDate) : base(title)
     {
-        Author = author;
-        Isbn = isbn;
+        IssueNumber = issueNumber;
+        PublishDate = publishDate;
     }
 }

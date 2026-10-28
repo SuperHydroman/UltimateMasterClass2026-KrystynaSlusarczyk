@@ -2,12 +2,12 @@
 
 public class Dvd : Product
 {
-    private string Author { get; }
-    private string Isbn { get; }
+    private string Director { get; }
+    private string DurationInMinutes { get; }
 
-    public Dvd(string title, string author, string isbn) : base(title)
+    public Dvd(string title, string director, string durationInMinutes) : base(title)
     {
-        Author = author;
-        Isbn = isbn;
+        Director = director;
+        DurationInMinutes = durationInMinutes;
     }
 }
