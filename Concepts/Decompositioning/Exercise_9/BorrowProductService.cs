@@ -7,7 +7,7 @@ public class BorrowProductService
 {
     public void Borrow(Product product, Member member)
     {
-        if (member.BorrowedProducts.Count > 3)
+        if (member.BorrowedProducts.Count >= member.MaximumBorrowedProducts)
         {
             Console.WriteLine("You cannot borrow any more products.");
             return;
